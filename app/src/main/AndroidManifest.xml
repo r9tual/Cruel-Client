@@ -25,7 +25,7 @@
         android:persistent="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NovaClient"
+        android:theme="@style/Theme.Cruel"
         tools:targetApi="tiramisu">
 
         <activity
