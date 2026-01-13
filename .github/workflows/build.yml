@@ -1,11 +1,12 @@
 name: Build Cruel Client
 
 on:
-  workflow_dispatch: # Allows manual start
+  workflow_dispatch: # Allows you to tap "Run workflow" on your phone
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -17,11 +18,24 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      # This step fixes all the "Nova" references in the code automatically
+      - name: Bulk Rename Imports & Themes
+        run: |
+          echo "Starting rebranding process..."
+          # Replace package name in all Kotlin, Java, and XML files
+          find . -type f \( -name "*.kt" -o -name "*.java" -o -name "*.xml" -o -name "*.kts" \) -print0 | xargs -0 sed -i 's/com.radiantbyte.novaclient/net.cruel.client/g'
+          # Replace the Theme name to match your new themes.xml
+          find . -type f \( -name "*.kt" -o -name "*.java" -o -name "*.xml" \) -print0 | xargs -0 sed -i 's/Theme.NovaClient/Theme.Cruel/g'
+          # Replace the Relay name references
+          find . -type f \( -name "*.kt" -o -name "*.java" -o -name "*.xml" \) -print0 | xargs -0 sed -i 's/NovaRelay/CruelRelay/g'
+          echo "Rebranding finished."
+
       - name: Grant permissions
         run: chmod +x gradlew
 
       - name: Build APK
-        run: ./gradlew assembleDebug
+        # We use --stacktrace so if it fails, it tells us exactly why
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload Cruel APK
         uses: actions/upload-artifact@v4
