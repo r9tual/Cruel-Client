@@ -10,16 +10,18 @@ plugins {
 }
 
 android {
-    namespace = "com.radiantbyte.novaclient"
+    // UPDATED: Changed namespace to match Cruel Client
+    namespace = "net.cruel.client"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.radiantbyte.novaclient"
+        // UPDATED: Changed applicationId so it installs as a separate app
+        applicationId = "net.cruel.client"
         minSdk = 28
         //noinspection OldTargetApi,EditedTargetSdkVersion
         targetSdk = 35
         versionCode = 1
-        versionName = "2.4"
+        versionName = "1.0.0-Cruel" // UPDATED: Versioning for your client
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -37,6 +39,7 @@ android {
             enableV2Signing = true
             enableV3Signing = true
 
+            // Ensure buildKey.jks exists in your root directory
             storeFile = rootDir.resolve("buildKey.jks")
             keyAlias = "UntrustedKey"
             storePassword = "123456"
