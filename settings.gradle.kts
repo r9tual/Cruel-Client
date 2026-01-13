@@ -27,7 +27,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NovaClient"
+rootProject.name = "CruelClient"
 include(":app")
 include(":relay")
 include(
