@@ -10,81 +10,46 @@ plugins {
 }
 
 android {
-    // UPDATED: Changed namespace to match Cruel Client
     namespace = "net.cruel.client"
     compileSdk = 36
 
     defaultConfig {
-        // UPDATED: Changed applicationId so it installs as a separate app
         applicationId = "net.cruel.client"
         minSdk = 28
-        //noinspection OldTargetApi,EditedTargetSdkVersion
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0.0-Cruel" // UPDATED: Versioning for your client
+        versionName = "1.0.0-Cruel"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            //noinspection ChromeOsAbiSupport
             abiFilters += setOf("arm64-v8a", "armeabi-v7a")
         }
     }
+
     buildFeatures {
         buildConfig = true
     }
-    signingConfigs {
-        create("shared") {
-            enableV1Signing = true
-            enableV2Signing = true
-            enableV3Signing = true
 
-            // Ensure buildKey.jks exists in your root directory
-            storeFile = rootDir.resolve("buildKey.jks")
-            keyAlias = "UntrustedKey"
-            storePassword = "123456"
-            keyPassword = "123456"
-        }
-    }
-    packaging {
-        jniLibs.useLegacyPackaging = true
-        resources.excludes.addAll(
-            setOf(
-                "DebugProbesKt.bin"
-            )
-        )
-        resources.pickFirsts.addAll(
-            setOf(
-                "META-INF/INDEX.LIST",
-                "META-INF/io.netty.versions.properties",
-                "META-INF/DEPENDENCIES"
-            )
-        )
-    }
+    // Use default debug signing to avoid "buildKey.jks not found" errors
     buildTypes {
         debug {
             isMinifyEnabled = false
             isDebuggable = true
-            signingConfig = signingConfigs.getByName("shared")
         }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            isDebuggable = false
-            signingConfig = signingConfigs.getByName("shared")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     composeCompiler {
-        includeTraceMarkers = false
-        includeSourceInformation = false
         featureFlags = setOf(
             ComposeFeatureFlag.OptimizeNonSkippingGroups,
             ComposeFeatureFlag.PausableComposition
@@ -115,10 +80,4 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons.extended)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }
